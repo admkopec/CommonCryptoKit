@@ -49,7 +49,7 @@ public enum Curve25519 {
                 return privateData.prefix(privateLength)
             }
             /// Creates a random Curve25519 private key for signing.
-            public init() throws {
+            public init() {
                 pkey = OpenSSLPointer(nil, defer: { pkey in
                     EVP_PKEY_free(pkey)
                 })
@@ -58,7 +58,7 @@ public enum Curve25519 {
                 })
                 EVP_PKEY_keygen_init(pctx.pointer)
                 EVP_PKEY_keygen(pctx.pointer, &pkey.pointer)
-                guard pkey.pointer != nil else { throw CCKitError.keyCreationFailure }
+                guard pkey.pointer != nil else { fatalError("CCKitError.keyCreationFailure") }
             }
             
             /// Creates a Curve25519 private key for signing from a data representation of the key.
@@ -142,7 +142,7 @@ public enum Curve25519 {
                 return privateData.prefix(privateLength)
             }
             /// Creates a random Curve25519 private key for key agreement.
-            public init() throws {
+            public init() {
                 pkey = OpenSSLPointer(nil, defer: { pkey in
                     EVP_PKEY_free(pkey)
                 })
@@ -151,7 +151,7 @@ public enum Curve25519 {
                 })
                 EVP_PKEY_keygen_init(pctx.pointer)
                 EVP_PKEY_keygen(pctx.pointer, &pkey.pointer)
-                guard pkey.pointer != nil else { throw CCKitError.keyCreationFailure }
+                guard pkey.pointer != nil else { fatalError("CCKitError.keyCreationFailure") }
             }
             
             /// Creates a Curve25519 private key for key agreement from a data representation of the key.
@@ -235,7 +235,7 @@ public enum Curve25519 {
                 return privateData.prefix(privateLength)
             }
             /// Creates a random Curve25519 private key for encryption.
-            public init() throws {
+            public init() {
                 pkey = OpenSSLPointer(nil, defer: { pkey in
                     EVP_PKEY_free(pkey)
                 })
@@ -244,7 +244,7 @@ public enum Curve25519 {
                 })
                 EVP_PKEY_keygen_init(pctx.pointer)
                 EVP_PKEY_keygen(pctx.pointer, &pkey.pointer)
-                guard pkey.pointer != nil else { throw CCKitError.keyCreationFailure }
+                guard pkey.pointer != nil else { fatalError("CCKitError.keyCreationFailure") }
             }
             
             /// Creates a Curve25519 private key for encryption from a data representation of the key.

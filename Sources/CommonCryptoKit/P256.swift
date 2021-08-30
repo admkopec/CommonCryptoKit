@@ -58,7 +58,7 @@ public enum P256 {
                 try! CryptoKit.P256.Signing.PrivateKey(x963Representation: x963Representation).pemRepresentation
             }
             /// Creates a random P-256 private key for signing.
-            public init() throws {
+            public init() {
                 let attributes: [String: Any] = [kSecAttrKeySizeInBits as String: 256,
                                                  kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
                                                  kSecPrivateKeyAttrs as String: [kSecAttrIsPermanent as String: false],
@@ -66,7 +66,7 @@ public enum P256 {
                 var error: Unmanaged<CFError>?
 
                 guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
-                    throw error?.takeRetainedValue() ?? CCKitError.keyCreationFailure
+                    fatalError("CCKitError.keyCreationFailure: \(error?.takeRetainedValue().localizedDescription ?? "Unknonw")")
                 }
                 secKey = privateKey
             }
@@ -213,7 +213,7 @@ public enum P256 {
                 try! CryptoKit.P256.KeyAgreement.PrivateKey(x963Representation: x963Representation).pemRepresentation
             }
             /// Creates a random P-256 private key for key agreement.
-            public init() throws {
+            public init() {
                 let attributes: [String: Any] = [kSecAttrKeySizeInBits as String: 256,
                                                  kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
                                                  kSecPrivateKeyAttrs as String: [kSecAttrIsPermanent as String: false],
@@ -221,7 +221,7 @@ public enum P256 {
                 var error: Unmanaged<CFError>?
 
                 guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
-                    throw error?.takeRetainedValue() ?? CCKitError.keyCreationFailure
+                    fatalError("CCKitError.keyCreationFailure: \(error?.takeRetainedValue().localizedDescription ?? "Unknonw")")
                 }
                 secKey = privateKey
             }
@@ -390,7 +390,7 @@ public enum P256 {
                 try! CryptoKit.P256.KeyAgreement.PrivateKey(x963Representation: x963Representation).pemRepresentation
             }
             /// Creates a random P-256 private key for encryption.
-            public init() throws {
+            public init() {
                 let attributes: [String: Any] = [kSecAttrKeySizeInBits as String: 256,
                                                  kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
                                                  kSecPrivateKeyAttrs as String: [kSecAttrIsPermanent as String: false],
@@ -398,7 +398,7 @@ public enum P256 {
                 var error: Unmanaged<CFError>?
 
                 guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
-                    throw error?.takeRetainedValue() ?? CCKitError.keyCreationFailure
+                    fatalError("CCKitError.keyCreationFailure: \(error?.takeRetainedValue().localizedDescription ?? "Unknonw")")
                 }
                 secKey = privateKey
             }

@@ -20,7 +20,7 @@ final class CommonCryptoKitTests: XCTestCase {
         // Verify using rawRepresentation
         
         // Verify CommonCryptoKit -> CryptoKit
-        let privateKey = try CommonCryptoKit.P256.Signing.PrivateKey()
+        let privateKey = CommonCryptoKit.P256.Signing.PrivateKey()
         let publicKey = try CryptoKit.P256.Signing.PublicKey(rawRepresentation: privateKey.publicKey.rawRepresentation)
         XCTAssert(publicKey.rawRepresentation == privateKey.publicKey.rawRepresentation)
         XCTAssert(publicKey.x963Representation == privateKey.publicKey.x963Representation)
@@ -33,7 +33,7 @@ final class CommonCryptoKitTests: XCTestCase {
         // Verify using x963Representation
         
         // Verify CommonCryptoKit -> CryptoKit
-        let privateKey3 = try CommonCryptoKit.P256.Signing.PrivateKey()
+        let privateKey3 = CommonCryptoKit.P256.Signing.PrivateKey()
         let publicKey3 = try CryptoKit.P256.Signing.PublicKey(x963Representation: privateKey3.publicKey.x963Representation)
         XCTAssert(publicKey3.x963Representation == privateKey3.publicKey.x963Representation)
         XCTAssert(publicKey3.rawRepresentation == privateKey3.publicKey.rawRepresentation)
@@ -47,7 +47,7 @@ final class CommonCryptoKitTests: XCTestCase {
         // Verify using rawRepresentation
         
         // Verify CommonCryptoKit -> CryptoKit
-        let privateKey25519 = try CommonCryptoKit.Curve25519.Signing.PrivateKey()
+        let privateKey25519 = CommonCryptoKit.Curve25519.Signing.PrivateKey()
         let publicKey25519 = try CryptoKit.Curve25519.Signing.PublicKey(rawRepresentation: privateKey25519.publicKey.rawRepresentation)
         XCTAssert(publicKey25519.rawRepresentation == privateKey25519.publicKey.rawRepresentation)
         // Verify CryptoKit -> CommonCryptoKit
@@ -61,7 +61,7 @@ final class CommonCryptoKitTests: XCTestCase {
         
         // MARK: P256
         // Test signature creation and verification
-        let privateKey = try CommonCryptoKit.P256.Signing.PrivateKey()
+        let privateKey = CommonCryptoKit.P256.Signing.PrivateKey()
         let signature = try privateKey.signature(for: dataToSign)
                 
         // Verify derRepresentation
@@ -71,7 +71,7 @@ final class CommonCryptoKitTests: XCTestCase {
         XCTAssert(privateKey.publicKey.isValidSignature(signature, for: dataToSign))
         
         // Make sure the signature validation fails with wrong key
-        let newKey = try CommonCryptoKit.P256.Signing.PrivateKey()
+        let newKey = CommonCryptoKit.P256.Signing.PrivateKey()
         XCTAssert(newKey.publicKey.isValidSignature(signature, for: dataToSign) == false)
         
         // Make sure the signature is verifiable by CryptoKit
@@ -89,14 +89,14 @@ final class CommonCryptoKitTests: XCTestCase {
         
         // MARK: Curve25519
         // Test signature creation and verification
-        let privateKey25519 = try CommonCryptoKit.Curve25519.Signing.PrivateKey()
+        let privateKey25519 = CommonCryptoKit.Curve25519.Signing.PrivateKey()
         let signature25519 = try privateKey25519.signature(for: dataToSign)
         
         // Verify Signature
         XCTAssert(privateKey25519.publicKey.isValidSignature(signature25519, for: dataToSign))
         
         // Make sure the signature validation fails with wrong key
-        let newKey25519 = try CommonCryptoKit.Curve25519.Signing.PrivateKey()
+        let newKey25519 = CommonCryptoKit.Curve25519.Signing.PrivateKey()
         XCTAssert(newKey25519.publicKey.isValidSignature(signature25519, for: dataToSign) == false)
         
         // Make sure the signature is verifiable by CryptoKit
@@ -118,8 +118,8 @@ final class CommonCryptoKitTests: XCTestCase {
         let sharedInfo = "Shared Secret".data(using: .utf8)!
 
         // MARK: P256
-        let alicePrivateKey = try CommonCryptoKit.P256.KeyAgreement.PrivateKey()
-        let bobPrivateKey = try CommonCryptoKit.P256.KeyAgreement.PrivateKey()
+        let alicePrivateKey = CommonCryptoKit.P256.KeyAgreement.PrivateKey()
+        let bobPrivateKey = CommonCryptoKit.P256.KeyAgreement.PrivateKey()
         let symmetricKey = try alicePrivateKey.sharedSecretFromKeyAgreement(with: bobPrivateKey.publicKey).x963DerivedSymmetricKey(using: SHA256.self, sharedInfo: sharedInfo, outputByteCount: 32)
         
         // Verify the keys are the same
@@ -133,8 +133,8 @@ final class CommonCryptoKitTests: XCTestCase {
         XCTAssert(aliceSamSymmetricKey.asCryptoKitKey == samAliceSymmetricKey)
         
         // MARK: Curve25519
-        let alicePrivateKey25519 = try CommonCryptoKit.Curve25519.KeyAgreement.PrivateKey()
-        let bobPrivateKey25519 = try CommonCryptoKit.Curve25519.KeyAgreement.PrivateKey()
+        let alicePrivateKey25519 = CommonCryptoKit.Curve25519.KeyAgreement.PrivateKey()
+        let bobPrivateKey25519 = CommonCryptoKit.Curve25519.KeyAgreement.PrivateKey()
         let symmetricKey25519 = try alicePrivateKey25519.sharedSecretFromKeyAgreement(with: bobPrivateKey25519.publicKey).x963DerivedSymmetricKey(using: SHA256.self, sharedInfo: sharedInfo, outputByteCount: 32)
         
         // Verify the keys are the same
@@ -167,8 +167,8 @@ final class CommonCryptoKitTests: XCTestCase {
         let salt = CommonCryptoKit.SymmetricKey(size: .bits256)
         let plaintextToHash = "Hello, World!".data(using: .utf8)!
         let derivedKey = try PBKDF2.deriveKey(using: SHA256.self, password: plaintextToHash, salt: salt.dataRepresentation, outputByteCount: 32, rounds: 100_000)
-        XCTAssert(derivedKey.count == 32)
-        XCTAssert(derivedKey != Data(count: 32))
+        XCTAssert(derivedKey.dataRepresentation.count == 32)
+        XCTAssert(derivedKey.dataRepresentation != Data(count: 32))
     }
     /// Tests AES encryption in GCM mode.
     func testAES() throws {

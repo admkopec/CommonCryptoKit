@@ -8,10 +8,10 @@ This framework is a wrapper around Apple's CommonCrypto and Security frameworks 
 ## 💻 Requirements
 
 This framework works on all Apple devices with the minimum system requirements:
-    * 📱 iOS 10.0+
-    * 📺 tvOS 10.0+
-    * ⌚️ watchOS 3.0+
-    * 💻 macOS 10.12+
+* 📱 iOS 10.0+
+* 📺 tvOS 10.0+
+* ⌚️ watchOS 3.0+
+* 💻 macOS 10.12+
 
 ## 📖 Usage
 
