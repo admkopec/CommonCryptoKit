@@ -27,7 +27,7 @@ public extension AES.GCM {
         ///
         ///   The default nonce is a 12-byte random nonce.
         ///
-        init() {
+        public init() {
             if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
                 #if canImport(CryptoKit)
                 try! self.init(data: CryptoKit.AES.GCM.Nonce().dataRepresentation)
@@ -57,7 +57,7 @@ public extension AES.GCM {
         /// - Parameters:
         ///    - data: A data representation of the nonce. The initializer throws an error if the data has a length of zero, and otherwise accepts an arrbitrary amount of data.
         ///
-        init<D>(data: D) throws where D: DataProtocol {
+        public init<D>(data: D) throws where D: DataProtocol {
             guard data.count >= AES.GCM.defaultNonceByteCount else { throw CCKitError.incorrectParameterSize }
             self.bytes = Data(data)
         }
@@ -87,7 +87,7 @@ public extension ChaChaPoly {
         ///
         ///   The default nonce is a 12-byte random nonce.
         ///
-        init() {
+        public init() {
             if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
                 #if canImport(CryptoKit)
                 try! self.init(data: CryptoKit.ChaChaPoly.Nonce().dataRepresentation)
@@ -117,7 +117,7 @@ public extension ChaChaPoly {
         /// - Parameters:
         ///    - data: A 12-byte data representation of the nonce. The initializer throws an error if the data has a length other than 12 bytes.
         ///
-        init<D>(data: D) throws where D: DataProtocol {
+        public init<D>(data: D) throws where D: DataProtocol {
             guard data.count == ChaChaPoly.defaultNonceByteCount else { throw CCKitError.incorrectParameterSize }
             self.bytes = Data(data)
         }
