@@ -26,9 +26,15 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "CommonCryptoKit",
-            dependencies: ["OpenSSL"]),
+            dependencies: ["OpenSSL"],
+            linkerSettings: [
+                .linkedFramework("CryptoKit")
+            ]),
         .testTarget(
             name: "CommonCryptoKitTests",
-            dependencies: ["CommonCryptoKit"]),
+            dependencies: ["CommonCryptoKit"],
+            linkerSettings: [
+                .linkedFramework("CryptoKit")
+            ]),
     ]
 )
