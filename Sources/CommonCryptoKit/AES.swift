@@ -284,10 +284,12 @@ public extension AES.GCM {
     /// - Returns:
     ///    The original plaintext message that was sealed in the box, as long as the correct key is used and authentication succeeds. The call throws an error if decryption or authentication fail.
     static func open<AuthenticatedData>(_ sealedBox: AES.GCM.SealedBox, using key: SymmetricKey, authenticating authenticatedData: AuthenticatedData) throws -> Data where AuthenticatedData : DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.AES.GCM.SealedBox(nonce: sealedBox.nonce.asCryptoKitNonce, ciphertext: sealedBox.ciphertext, tag: sealedBox.tag)
             return try CryptoKit.AES.GCM.open(cryptoSealBox, using: key.asCryptoKitKey, authenticating: authenticatedData)
         }
+        #endif
         let nonce = sealedBox.nonce
         let ciphertext = sealedBox.ciphertext
         var givenTag = sealedBox.tag

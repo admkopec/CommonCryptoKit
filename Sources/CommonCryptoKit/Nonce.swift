@@ -100,7 +100,6 @@ public extension ChaChaPoly {
                     fatalError("There was an error generating secureRandomBytes")
                 }
                 #endif
-                try! self.init(data: CryptoKit.ChaChaPoly.Nonce().dataRepresentation)
             } else {
                 let bytes = 12
                 var keyData = Data(count: bytes)

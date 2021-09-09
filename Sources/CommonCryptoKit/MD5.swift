@@ -64,7 +64,7 @@ public extension Insecure {
         }
     }
 }
-
+#if canImport(CryptoKit)
 // Adding HashDigest conformance
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension CryptoKit.Insecure.MD5Digest: HashDigest {
@@ -77,3 +77,4 @@ extension CryptoKit.Insecure.MD5Digest: HashDigest {
         return self.compactMap { String(format: "%02hhx", $0) }.joined()
     }
 }
+#endif
