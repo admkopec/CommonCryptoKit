@@ -30,7 +30,7 @@ public enum SecureEnclave {
         /// A mechanism used to create a shared secret between two users by performing NIST P-256 elliptic curve Diffie Hellman (ECDH) key exchange within the Secure Enclave.
         public enum KeyAgreement {
             /// A P-256 private key used for key agreement.
-            struct PrivateKey {
+            public struct PrivateKey {
                 private var cryptoKey: CryptoKit.SecureEnclave.P256.KeyAgreement.PrivateKey
                 
                 /// A data representation of the private key.
@@ -86,7 +86,7 @@ public enum SecureEnclave {
         /// A mechanism used to create or verify a cryptographic signature using the NIST P-256 elliptic curve digital signature algorithm (ECDSA) within the Secure Enclave.
         public enum Signing {
             /// A P-256 private key used for signing.
-            struct PrivateKey {
+            public struct PrivateKey {
                 private var cryptoKey: CryptoKit.SecureEnclave.P256.Signing.PrivateKey
                 
                 /// A data representation of the private key.
@@ -150,7 +150,7 @@ extension SecureEnclave.P256.KeyAgreement.PrivateKey {
     ///    - publicKeyShare: The public key from another party to be combined with the private key from this user to create the shared secret.
     /// - Returns:
     ///     The computed shared secret.
-    func sharedSecretFromKeyAgreement(with publicKeyShare: P256.KeyAgreement.PublicKey) throws -> SharedSecret {
+    public func sharedSecretFromKeyAgreement(with publicKeyShare: P256.KeyAgreement.PublicKey) throws -> SharedSecret {
         let cryptoPublicKeyShare = try CryptoKit.P256.KeyAgreement.PublicKey(x963Representation: publicKeyShare.x963Representation)
         return try SharedSecret(sharedSecret: cryptoKey.sharedSecretFromKeyAgreement(with: cryptoPublicKeyShare))
     }
@@ -165,7 +165,7 @@ extension SecureEnclave.P256.Signing.PrivateKey {
     ///    - data: The data to sign.
     /// - Returns:
     ///     A cryptographic signature. The signing algorithm employs randomization to generate a different signature on every call, even for the same data and key.
-    func signature<D>(for data: D) throws -> P256.Signing.ECDSASignature where D: DataProtocol {
+    public func signature<D>(for data: D) throws -> P256.Signing.ECDSASignature where D: DataProtocol {
         return try P256.Signing.ECDSASignature(rawRepresentation: cryptoKey.signature(for: data).rawRepresentation)
     }
 }
