@@ -9,8 +9,11 @@
 //
 
 import OpenSSL
-import CryptoKit
 import Foundation
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// An implementation of the ChaCha20-Poly1305 cipher.
 @available(iOS, introduced: 10.0)

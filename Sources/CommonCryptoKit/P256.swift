@@ -9,8 +9,11 @@
 //
 
 import Security
-import CryptoKit
 import Foundation
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// An elliptic curve that enables NIST P-256 signatures and key agreement.
 @available(iOS, introduced: 10.0)

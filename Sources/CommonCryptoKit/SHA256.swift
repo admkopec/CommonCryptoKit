@@ -8,9 +8,12 @@
 //  Licensed under the MIT License
 //
 
-import CryptoKit
 import Foundation
 import CommonCrypto
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// An implementation of Secure Hashing Algorithm 2 (SHA-2) hashing with a 256-bit digest.
 @available(iOS, introduced: 10.0/*, deprecated: 14.0, message: "This API is deprecated, please use CryptoKit directly."*/)

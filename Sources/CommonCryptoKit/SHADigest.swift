@@ -8,9 +8,11 @@
 //  Licensed under the MIT License
 //
 
-import CryptoKit
 import Foundation
-import CommonCrypto
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// A type that performs cryptographically secure hashing using Secure Hashing Algorithm 2 (SHA-2).
 public protocol SHAFunction: HashFunction where Digest: SHADigest {

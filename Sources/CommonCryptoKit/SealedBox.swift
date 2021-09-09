@@ -8,10 +8,11 @@
 //  Licensed under the MIT License
 //
 
-import Security
-import CryptoKit
 import Foundation
-import CommonCrypto
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 // MARK: - AES
 

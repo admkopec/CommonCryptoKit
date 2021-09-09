@@ -9,8 +9,11 @@
 //
 
 import Security
-import CryptoKit
 import Foundation
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// A symmetric cryptographic key.
 ///

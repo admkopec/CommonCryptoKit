@@ -8,8 +8,11 @@
 //  Licensed under the MIT License
 //
 
-import CryptoKit
 import Foundation
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// A key agreement result from which you can derive a symmetric cryptographic key.
 @available(iOS, introduced: 10.0)

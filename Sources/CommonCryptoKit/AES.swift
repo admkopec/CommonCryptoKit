@@ -9,8 +9,11 @@
 //
 
 import OpenSSL
-import CryptoKit
 import Foundation
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 /// A container for Advanced Encryption Standard (AES) ciphers.
 @available(iOS, introduced: 10.0)

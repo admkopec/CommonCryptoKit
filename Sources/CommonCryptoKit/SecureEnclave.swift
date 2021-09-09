@@ -8,9 +8,15 @@
 //  Licensed under the MIT License
 //
 
-import CryptoKit
 import Foundation
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
+
+#if canImport(LocalAuthentication)
 import LocalAuthentication
+#endif
 
 /// A representation of a device’s hardware-based key manager.
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)

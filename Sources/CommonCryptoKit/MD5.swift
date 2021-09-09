@@ -8,9 +8,12 @@
 //  Licensed under the MIT License
 //
 
-import CryptoKit
 import Foundation
 import CommonCrypto
+
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 @available(iOS, introduced: 10.0/*, deprecated: 14.0, message: "This API is deprecated, please use CryptoKit directly."*/)
 @available(tvOS, introduced: 10.0/*, deprecated: 13.0, message: "This API is deprecated, please use CryptoKit directly."*/)
