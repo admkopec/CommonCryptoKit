@@ -19,7 +19,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://conditionalisied.com/krzyzanowskim/OpenSSL.git", .upToNextMinor(from: "1.1.180")),
+        .package(url: "https://github.com/krzyzanowskim/OpenSSL.git", .upToNextMinor(from: "1.1.180")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
