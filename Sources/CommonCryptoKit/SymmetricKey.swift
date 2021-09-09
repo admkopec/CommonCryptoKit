@@ -29,14 +29,17 @@ import CryptoKit
 public struct SymmetricKey: ContiguousBytes, Equatable {
     /// The number of bits in the key.
     var bitCount: Int {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *), let key = cryptoKey as? CryptoKit.SymmetricKey {
             return key.bitCount
-        } else {
-            return dataStorage.count * 8
         }
+        #endif
+        return dataStorage.count * 8
     }
+    #if canImport(CryptoKit)
     // CryptoKit.SymmetricKey
     private var cryptoKey: Any?
+    #endif
     // TODO: Make a SecureBytes storage as a fallback
     private var dataStorage: Data!
     
@@ -44,6 +47,7 @@ public struct SymmetricKey: ContiguousBytes, Equatable {
     /// - Parameters:
     ///    - data: The contiguous bytes from which to create the key.
     public init<D>(data: D) where D: ContiguousBytes {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             self.cryptoKey = CryptoKit.SymmetricKey(data: data)
         } else {
@@ -51,37 +55,50 @@ public struct SymmetricKey: ContiguousBytes, Equatable {
                 Data(dataBuffer)
             }
         }
+        #else
+        self.dataStorage = data.withUnsafeBytes { dataBuffer in
+            Data(dataBuffer)
+        }
+        #endif
     }
     /// Generates a new random key of the given size.
     /// - Parameters:
     ///    - size: The size of the key to generate. You can use one of the standard sizes, like ``SymmetricKeySize/bits256``, or you can create a key of custom length by initializing a ``SymmetricKeySize`` instance with a non-standard value.
     public init(size: SymmetricKeySize) {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             self.cryptoKey = CryptoKit.SymmetricKey(size: size.asCryptoKitKeySize)
         } else {
             self.dataStorage = SymmetricKey.secureRandom(count: size.bitCount / 8)
         }
+        #else
+        self.dataStorage = SymmetricKey.secureRandom(count: size.bitCount / 8)
+        #endif
     }
     
+    #if canImport(CryptoKit)
     @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
     internal init(_ cryptoKitKey: CryptoKit.SymmetricKey) {
         self.cryptoKey = cryptoKitKey
     }
+    #endif
     
     public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *), let key = cryptoKey as? CryptoKit.SymmetricKey {
             return try key.withUnsafeBytes(body)
-        } else {
-            return try dataStorage.withUnsafeBytes(body)
         }
+        #endif
+        return try dataStorage.withUnsafeBytes(body)
     }
     
     public static func == (lhs: SymmetricKey, rhs: SymmetricKey) -> Bool {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *), let lhsKey = lhs.cryptoKey as? CryptoKit.SymmetricKey, let rhsKey = rhs.cryptoKey as? CryptoKit.SymmetricKey {
             return lhsKey == rhsKey
-        } else {
-            return lhs.dataStorage == rhs.dataStorage
         }
+        #endif
+        return lhs.dataStorage == rhs.dataStorage
     }
     
     private static func secureRandom(count bytes: Int) -> Data {
@@ -124,6 +141,7 @@ extension SymmetricKey {
     }
 }
 
+#if canImport(CryptoKit)
 // MARK: CryptoKit
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
 extension SymmetricKey.SymmetricKeySize {
@@ -138,3 +156,4 @@ extension SymmetricKey {
         return cryptoKey as! CryptoKit.SymmetricKey
     }
 }
+#endif

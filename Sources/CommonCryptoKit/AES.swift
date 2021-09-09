@@ -50,10 +50,12 @@ public extension AES.GCM {
     /// - Returns:
     ///    The sealed message.
     static func seal<Plaintext, AuthenticatedData>(_ message: Plaintext, using key: SymmetricKey, nonce: AES.GCM.Nonce? = nil, authenticating authenticatedData: AuthenticatedData) throws -> AES.GCM.SealedBox where Plaintext : DataProtocol, AuthenticatedData : DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.AES.GCM.seal(message, using: key.asCryptoKitKey, nonce: nonce?.asCryptoKitNonce, authenticating: authenticatedData)
             return try AES.GCM.SealedBox(nonce: AES.GCM.Nonce(data: cryptoSealBox.nonce.dataRepresentation), ciphertext: cryptoSealBox.ciphertext, tag: cryptoSealBox.tag)
         }
+        #endif
         let nonce = nonce ?? AES.GCM.Nonce()
         var length: Int32 = 0
         let ctx = EVP_CIPHER_CTX_new()
@@ -106,10 +108,12 @@ public extension AES.GCM {
     /// - Returns:
     ///    The sealed message.
     static func seal<Plaintext>(_ message: Plaintext, using key: SymmetricKey, nonce: AES.GCM.Nonce? = nil) throws -> AES.GCM.SealedBox where Plaintext : DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.AES.GCM.seal(message, using: key.asCryptoKitKey, nonce: nonce?.asCryptoKitNonce)
             return try AES.GCM.SealedBox(nonce: AES.GCM.Nonce(data: cryptoSealBox.nonce.dataRepresentation), ciphertext: cryptoSealBox.ciphertext, tag: cryptoSealBox.tag)
         }
+        #endif
         // Fallback using OpenSSL
         return try AES.GCM.seal(message, using: key, nonce: nonce, authenticating: Data())
     }
@@ -338,10 +342,12 @@ public extension AES.GCM {
     /// - Returns:
     ///    The original plaintext message that was sealed in the box, as long as the correct key is used and authentication succeeds. The call throws an error if decryption or authentication fail.
     static func open(_ sealedBox: AES.GCM.SealedBox, using key: SymmetricKey) throws -> Data {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.AES.GCM.SealedBox(nonce: sealedBox.nonce.asCryptoKitNonce, ciphertext: sealedBox.ciphertext, tag: sealedBox.tag)
             return try CryptoKit.AES.GCM.open(cryptoSealBox, using: key.asCryptoKitKey)
         }
+        #endif
         // Fallback using OpenSSL
         return try AES.GCM.open(sealedBox, using: key, authenticating: Data())
     }
@@ -411,6 +417,7 @@ public extension AES.GCM {
     }
 }
 
+#if canImport(CryptoKit)
 // CryptoKit conversions
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
 fileprivate extension AES.GCM.Nonce {
@@ -418,3 +425,4 @@ fileprivate extension AES.GCM.Nonce {
         return try! CryptoKit.AES.GCM.Nonce(data: dataRepresentation)
     }
 }
+#endif

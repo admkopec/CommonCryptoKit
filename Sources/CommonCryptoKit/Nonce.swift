@@ -28,8 +28,18 @@ public extension AES.GCM {
         ///   The default nonce is a 12-byte random nonce.
         ///
         init() {
-            if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *), #available(iOSApplicationExtension 14.0, macOSApplicationExtension 11.0, *) {
+            if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+                #if canImport(CryptoKit)
                 try! self.init(data: CryptoKit.AES.GCM.Nonce().dataRepresentation)
+                #else
+                let bytes = 12
+                var keyData = Data(count: bytes)
+                if keyData.withUnsafeMutableBytes({ SecRandomCopyBytes(kSecRandomDefault, bytes, $0.baseAddress!) }) == errSecSuccess {
+                    try! self.init(data: keyData)
+                } else {
+                    fatalError("There was an error generating secureRandomBytes")
+                }
+                #endif
             } else {
                 let bytes = 12
                 var keyData = Data(count: bytes)
@@ -78,7 +88,18 @@ public extension ChaChaPoly {
         ///   The default nonce is a 12-byte random nonce.
         ///
         init() {
-            if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *), #available(iOSApplicationExtension 14.0, macOSApplicationExtension 11.0, *) {
+            if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
+                #if canImport(CryptoKit)
+                try! self.init(data: CryptoKit.ChaChaPoly.Nonce().dataRepresentation)
+                #else
+                let bytes = 12
+                var keyData = Data(count: bytes)
+                if keyData.withUnsafeMutableBytes({ SecRandomCopyBytes(kSecRandomDefault, bytes, $0.baseAddress!) }) == errSecSuccess {
+                    try! self.init(data: keyData)
+                } else {
+                    fatalError("There was an error generating secureRandomBytes")
+                }
+                #endif
                 try! self.init(data: CryptoKit.ChaChaPoly.Nonce().dataRepresentation)
             } else {
                 let bytes = 12

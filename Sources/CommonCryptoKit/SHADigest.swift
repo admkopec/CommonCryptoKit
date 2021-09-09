@@ -10,10 +10,6 @@
 
 import Foundation
 
-#if canImport(CryptoKit)
-import CryptoKit
-#endif
-
 /// A type that performs cryptographically secure hashing using Secure Hashing Algorithm 2 (SHA-2).
 public protocol SHAFunction: HashFunction where Digest: SHADigest {
     /// Computes the digest of the bytes in the given data instance and returns the computed digest.
@@ -33,6 +29,9 @@ public extension SHADigest {
         return rawRepresentation.compactMap { String(format: "%02hhx", $0) }.joined()
     }
 }
+
+#if canImport(CryptoKit)
+import CryptoKit
 
 // MARK: - CryptoKit
 
@@ -87,3 +86,4 @@ extension CryptoKit.Insecure.SHA1Digest: HashDigest {
         return self.compactMap { String(format: "%02hhx", $0) }.joined()
     }
 }
+#endif

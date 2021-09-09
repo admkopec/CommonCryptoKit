@@ -10,10 +10,6 @@
 
 import Foundation
 
-#if canImport(CryptoKit)
-import CryptoKit
-#endif
-
 // MARK: - AES
 
 @available(iOS, introduced: 10.0/*, deprecated: 14.0, message: "This API is deprecated, please use CryptoKit directly."*/)

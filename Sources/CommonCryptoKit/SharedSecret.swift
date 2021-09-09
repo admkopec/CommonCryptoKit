@@ -32,6 +32,7 @@ public struct SharedSecret {
     ///    - outputByteCount: The length in bytes of resulting symmetric key.
     /// - Returns: The derived symmetric key.
     public func x963DerivedSymmetricKey<H, SI>(using hashFunction: H.Type, sharedInfo: SI, outputByteCount: Int) throws -> SymmetricKey where H: SHAFunction, SI: DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *), let sharedSecret = sharedSecret as? CryptoKit.SharedSecret {
             if hashFunction == SHA256.self {
                 return SymmetricKey(sharedSecret.x963DerivedSymmetricKey(using: CryptoKit.SHA256.self, sharedInfo: sharedInfo, outputByteCount: outputByteCount))
@@ -43,6 +44,7 @@ public struct SharedSecret {
                 throw CCKitError.keyDerivationFailure
             }
         }
+        #endif
         if let privateKey = privateKey as? P256.KeyAgreement.PrivateKey, let publicKey = publicKey as? P256.KeyAgreement.PublicKey {
             return try SharedSecret.x963DerivedSymmetricKeyP256(using: hashFunction, sharedInfo: sharedInfo, outputByteCount: outputByteCount, privateKey: privateKey, publicKey: publicKey)
         } else if let privateKey = privateKey as? Curve25519.KeyAgreement.PrivateKey, let publicKey = publicKey as? Curve25519.KeyAgreement.PublicKey {
@@ -51,7 +53,7 @@ public struct SharedSecret {
             throw CCKitError.keyCreationFailure
         }
     }
-    
+    #if canImport(CryptoKit)
     /// Derives a symmetric encryption key from the secret using HKDF key derivation.
     /// - Parameters:
     ///    - hashFunction: The hash function to use for key derivation.
@@ -76,7 +78,7 @@ public struct SharedSecret {
             fatalError("CCKitError.keyCreationFailure")
         }
     }
-    
+    #endif
     internal init(privateKey: P256.KeyAgreement.PrivateKey, publicKey: P256.KeyAgreement.PublicKey) {
         self.privateKey = privateKey
         self.publicKey  = publicKey
@@ -87,8 +89,10 @@ public struct SharedSecret {
         self.publicKey  = publicKey
     }
     
+    #if canImport(CryptoKit)
     @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
     internal init(sharedSecret: CryptoKit.SharedSecret) {
         self.sharedSecret = sharedSecret
     }
+    #endif
 }

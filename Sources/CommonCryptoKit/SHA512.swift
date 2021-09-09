@@ -26,10 +26,12 @@ public struct SHA512: SHAFunction {
     ///    - data: The data whose digest the hash function should compute. This can be any type that conforms to `DataProtocol`, like `Data` or an array of `UInt8` instances.
     /// - Returns: The computed digest of the data.
     public static func hash<D>(data: D) -> SHA512.Digest where D: DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let digest = CryptoKit.SHA512.hash(data: data)
             return Digest(rawRepresentation: digest.rawRepresentation)
         }
+        #endif
         var hashData = Data(count: Int(CC_SHA512_DIGEST_LENGTH))
         _ = hashData.withUnsafeMutableBytes { digestBytes in
             Data(data).withUnsafeBytes { messageBytes in

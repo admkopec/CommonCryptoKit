@@ -11,10 +11,6 @@
 import OpenSSL
 import Foundation
 
-#if canImport(CryptoKit)
-import CryptoKit
-#endif
-
 /// An elliptic curve that enables X25519 key agreement and ed25519 signatures.
 @available(iOS, introduced: 10.0)
 @available(tvOS, introduced: 10.0)

@@ -12,7 +12,6 @@ import Foundation
 
 #if canImport(CryptoKit)
 import CryptoKit
-#endif
 
 #if canImport(LocalAuthentication)
 import LocalAuthentication
@@ -43,7 +42,7 @@ public enum SecureEnclave {
                 public var publicKey: CommonCryptoKit.P256.KeyAgreement.PublicKey {
                     return try! CommonCryptoKit.P256.KeyAgreement.PublicKey(x963Representation: cryptoKey.publicKey.x963Representation)
                 }
-                
+                #if canImport(LocalAuthentication)
                 /// Creates a P-256 private key for key agreement from a data representation of the key.
                 /// - Parameters:
                 ///    - dataRepresentation: A raw representation of the key as a collection of contiguous bytes.
@@ -52,7 +51,7 @@ public enum SecureEnclave {
                 public init(dataRepresentation: Data, authenticationContext: LAContext? = nil) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.KeyAgreement.PrivateKey(dataRepresentation: dataRepresentation, authenticationContext: authenticationContext)
                 }
-                
+                #else
                 /// Creates a P-256 private key for key agreement from a data representation of the key.
                 /// - Parameters:
                 ///    - dataRepresentation: A raw representation of the key as a collection of contiguous bytes.
@@ -60,7 +59,9 @@ public enum SecureEnclave {
                 public init(dataRepresentation: Data) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.KeyAgreement.PrivateKey(dataRepresentation: dataRepresentation)
                 }
+                #endif
                 
+                #if canImport(LocalAuthentication)
                 /// Creates a P-256 private key for key agreement with access specified by an access control.
                 /// - Parameters:
                 ///    - compactRepresentable: A Boolean value that indicates whether CryptoKit creates the key with the structure to enable compact point encoding.
@@ -70,7 +71,7 @@ public enum SecureEnclave {
                 public init(compactRepresentable: Bool = true, accessControl: SecAccessControl = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, [], nil)!, authenticationContext: LAContext? = nil) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.KeyAgreement.PrivateKey(compactRepresentable: compactRepresentable, accessControl: accessControl, authenticationContext: authenticationContext)
                 }
-
+                #else
                 /// Creates a P-256 private key for key agreement with access specified by an access control.
                 /// - Parameters:
                 ///    - compactRepresentable: A Boolean value that indicates whether CryptoKit creates the key with the structure to enable compact point encoding.
@@ -79,6 +80,7 @@ public enum SecureEnclave {
                 public init(compactRepresentable: Bool = true, accessControl: SecAccessControl = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, [], nil)!) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.KeyAgreement.PrivateKey(compactRepresentable: compactRepresentable, accessControl: accessControl)
                 }
+                #endif
             }
         }
         /// A mechanism used to create or verify a cryptographic signature using the NIST P-256 elliptic curve digital signature algorithm (ECDSA) within the Secure Enclave.
@@ -96,7 +98,7 @@ public enum SecureEnclave {
                 public var publicKey: CommonCryptoKit.P256.Signing.PublicKey {
                     return try! CommonCryptoKit.P256.Signing.PublicKey(x963Representation: cryptoKey.publicKey.x963Representation)
                 }
-                
+                #if canImport(LocalAuthentication)
                 /// Creates a P-256 private key for signing from a data representation of the key.
                 /// - Parameters:
                 ///    - dataRepresentation: A raw representation of the key as a collection of contiguous bytes.
@@ -105,7 +107,7 @@ public enum SecureEnclave {
                 public init(dataRepresentation: Data, authenticationContext: LAContext? = nil) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.Signing.PrivateKey(dataRepresentation: dataRepresentation, authenticationContext: authenticationContext)
                 }
-                
+                #else
                 /// Creates a P-256 private key for signing from a data representation of the key.
                 /// - Parameters:
                 ///    - dataRepresentation: A raw representation of the key as a collection of contiguous bytes.
@@ -113,7 +115,8 @@ public enum SecureEnclave {
                 public init(dataRepresentation: Data) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.Signing.PrivateKey(dataRepresentation: dataRepresentation)
                 }
-                
+                #endif
+                #if canImport(LocalAuthentication)
                 /// Creates a P-256 private key for signing with access specified by an access control.
                 /// - Parameters:
                 ///    - compactRepresentable: A Boolean value that indicates whether CryptoKit creates the key with the structure to enable compact point encoding.
@@ -123,7 +126,7 @@ public enum SecureEnclave {
                 public init(compactRepresentable: Bool = true, accessControl: SecAccessControl = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, [], nil)!, authenticationContext: LAContext? = nil) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.Signing.PrivateKey(compactRepresentable: compactRepresentable, accessControl: accessControl, authenticationContext: authenticationContext)
                 }
-
+                #else
                 /// Creates a P-256 private key for signing with access specified by an access control.
                 /// - Parameters:
                 ///    - compactRepresentable: A Boolean value that indicates whether CryptoKit creates the key with the structure to enable compact point encoding.
@@ -132,6 +135,7 @@ public enum SecureEnclave {
                 public init(compactRepresentable: Bool = true, accessControl: SecAccessControl = SecAccessControlCreateWithFlags(nil, kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, [], nil)!) throws {
                     self.cryptoKey = try CryptoKit.SecureEnclave.P256.Signing.PrivateKey(compactRepresentable: compactRepresentable, accessControl: accessControl)
                 }
+                #endif
             }
         }
     }
@@ -165,3 +169,5 @@ extension SecureEnclave.P256.Signing.PrivateKey {
         return try P256.Signing.ECDSASignature(rawRepresentation: cryptoKey.signature(for: data).rawRepresentation)
     }
 }
+
+#endif

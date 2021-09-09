@@ -50,6 +50,7 @@ public enum P256 {
                 }
                 return x963.dropFirst()
             }
+            #if canImport(CryptoKit)
             /// A Distinguished Encoding Rules (DER) encoded representation of the private key.
             @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
             public var derRepresentation: Data {
@@ -60,6 +61,7 @@ public enum P256 {
             public var pemRepresentation: String {
                 try! CryptoKit.P256.Signing.PrivateKey(x963Representation: x963Representation).pemRepresentation
             }
+            #endif
             /// Creates a random P-256 private key for signing.
             public init() {
                 let attributes: [String: Any] = [kSecAttrKeySizeInBits as String: 256,
@@ -99,6 +101,7 @@ public enum P256 {
                 }
                 secKey = privateKey
             }
+            #if canImport(CryptoKit)
             /// Creates a P-256 private key for signing from a Distinguished Encoding Rules (DER) encoded representation.
             /// - Parameters:
             ///    - keyData: A DER-encoded representation of the key.
@@ -116,6 +119,7 @@ public enum P256 {
                 let privateKey = try CryptoKit.P256.Signing.PrivateKey(pemRepresentation: keyData)
                 try self.init(x963Representation: privateKey.x963Representation)
             }
+            #endif
         }
         /// A P-256 public key used to verify cryptographic signatures.
         public struct PublicKey {
@@ -136,6 +140,7 @@ public enum P256 {
                 }
                 return x963?.dropFirst()
             }
+            #if canImport(CryptoKit)
             /// A Distinguished Encoding Rules (DER) encoded representation of the private key.
             @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
             public var derRepresentation: Data {
@@ -146,6 +151,7 @@ public enum P256 {
             public var pemRepresentation: String {
                 try! CryptoKit.P256.Signing.PublicKey(x963Representation: x963Representation).pemRepresentation
             }
+            #endif
             /// Create the public key from CommonCrypto's `SecKey`.
             fileprivate init(secKey: SecKey) {
                 self.secKey = secKey
@@ -205,6 +211,7 @@ public enum P256 {
                 }
                 return x963.dropFirst()
             }
+            #if canImport(CryptoKit)
             /// A Distinguished Encoding Rules (DER) encoded representation of the private key.
             @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
             public var derRepresentation: Data {
@@ -215,6 +222,7 @@ public enum P256 {
             public var pemRepresentation: String {
                 try! CryptoKit.P256.KeyAgreement.PrivateKey(x963Representation: x963Representation).pemRepresentation
             }
+            #endif
             /// Creates a random P-256 private key for key agreement.
             public init() {
                 let attributes: [String: Any] = [kSecAttrKeySizeInBits as String: 256,
@@ -254,7 +262,7 @@ public enum P256 {
                 }
                 secKey = privateKey
             }
-            
+            #if canImport(CryptoKit)
             /// Creates a P-256 private key for key agreement from a Distinguished Encoding Rules (DER) encoded representation.
             /// - Parameters:
             ///    - keyData: A DER-encoded representation of the key.
@@ -272,6 +280,7 @@ public enum P256 {
                 let privateKey = try CryptoKit.P256.KeyAgreement.PrivateKey(pemRepresentation: keyData)
                 try self.init(x963Representation: privateKey.x963Representation)
             }
+            #endif
         }
         /// A P-256 public key used for key agreement.
         public struct PublicKey {
@@ -292,6 +301,7 @@ public enum P256 {
                 }
                 return x963?.dropFirst()
             }
+            #if canImport(CryptoKit)
             /// A Distinguished Encoding Rules (DER) encoded representation of the private key.
             @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
             public var derRepresentation: Data {
@@ -302,6 +312,7 @@ public enum P256 {
             public var pemRepresentation: String {
                 try! CryptoKit.P256.KeyAgreement.PublicKey(x963Representation: x963Representation).pemRepresentation
             }
+            #endif
             /// Create the public key from CommonCrypto's `SecKey`.
             fileprivate init(secKey: SecKey) {
                 self.secKey = secKey
@@ -314,6 +325,7 @@ public enum P256 {
                 guard x963.count == 65 else { throw CCKitError.incorrectKeySize }
                 try self.init(x963Representation: x963)
             }
+            #if canImport(CryptoKit)
             /// Creates a P-256 public key for key agreement from a compact representation of the key.
             /// - Parameters:
             ///    - keyData: A compact representation of the key as a collection of contiguous bytes.
@@ -322,6 +334,7 @@ public enum P256 {
                 let publicKey = try CryptoKit.P256.KeyAgreement.PublicKey(compactRepresentation: keyData)
                 try self.init(x963Representation: publicKey.x963Representation)
             }
+            #endif
             /// Creates a P-256 public key for key agreement from an ANSI x9.63 representation.
             /// - Parameters:
             ///    - keyData: An ANSI x9.63 representation of the key.
@@ -338,6 +351,7 @@ public enum P256 {
                 }
                 secKey = publicKey
             }
+            #if canImport(CryptoKit)
             /// Creates a P-256 public key for key agreement from a Distinguished Encoding Rules (DER) encoded representation.
             /// - Parameters:
             ///    - keyData: A DER-encoded representation of the key.
@@ -355,6 +369,7 @@ public enum P256 {
                 let publicKey = try CryptoKit.P256.KeyAgreement.PublicKey(pemRepresentation: keyData)
                 try self.init(x963Representation: publicKey.x963Representation)
             }
+            #endif
         }
     }
     /// A mechanism used to encrypt ...
@@ -382,6 +397,7 @@ public enum P256 {
                 }
                 return x963.dropFirst()
             }
+            #if canImport(CryptoKit)
             /// A Distinguished Encoding Rules (DER) encoded representation of the private key.
             @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
             public var derRepresentation: Data {
@@ -392,6 +408,7 @@ public enum P256 {
             public var pemRepresentation: String {
                 try! CryptoKit.P256.KeyAgreement.PrivateKey(x963Representation: x963Representation).pemRepresentation
             }
+            #endif
             /// Creates a random P-256 private key for encryption.
             public init() {
                 let attributes: [String: Any] = [kSecAttrKeySizeInBits as String: 256,
@@ -431,7 +448,7 @@ public enum P256 {
                 }
                 secKey = privateKey
             }
-            
+            #if canImport(CryptoKit)
             /// Creates a P-256 private key for encryption from a Distinguished Encoding Rules (DER) encoded representation.
             /// - Parameters:
             ///    - keyData: A DER-encoded representation of the key.
@@ -449,6 +466,7 @@ public enum P256 {
                 let privateKey = try CryptoKit.P256.KeyAgreement.PrivateKey(pemRepresentation: keyData)
                 try self.init(x963Representation: privateKey.x963Representation)
             }
+            #endif
         }
         /// A P-256 public key used for encryption.
         public struct PublicKey {
@@ -469,6 +487,7 @@ public enum P256 {
                 }
                 return x963?.dropFirst()
             }
+            #if canImport(CryptoKit)
             /// A Distinguished Encoding Rules (DER) encoded representation of the private key.
             @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
             public var derRepresentation: Data {
@@ -479,6 +498,7 @@ public enum P256 {
             public var pemRepresentation: String {
                 try! CryptoKit.P256.KeyAgreement.PublicKey(x963Representation: x963Representation).pemRepresentation
             }
+            #endif
             /// Create the public key from CommonCrypto's `SecKey`.
             fileprivate init(secKey: SecKey) {
                 self.secKey = secKey
@@ -491,6 +511,7 @@ public enum P256 {
                 guard x963.count == 65 else { throw CCKitError.incorrectKeySize }
                 try self.init(x963Representation: x963)
             }
+            #if canImport(CryptoKit)
             /// Creates a P-256 public key for encryption from a compact representation of the key.
             /// - Parameters:
             ///    - keyData: A compact representation of the key as a collection of contiguous bytes.
@@ -499,6 +520,7 @@ public enum P256 {
                 let publicKey = try CryptoKit.P256.KeyAgreement.PublicKey(compactRepresentation: keyData)
                 try self.init(x963Representation: publicKey.x963Representation)
             }
+            #endif
             /// Creates a P-256 public key for encryption from an ANSI x9.63 representation.
             /// - Parameters:
             ///    - keyData: An ANSI x9.63 representation of the key.
@@ -515,6 +537,7 @@ public enum P256 {
                 }
                 secKey = publicKey
             }
+            #if canImport(CryptoKit)
             /// Creates a P-256 public key for encryption from a Distinguished Encoding Rules (DER) encoded representation.
             /// - Parameters:
             ///    - keyData: A DER-encoded representation of the key.
@@ -532,6 +555,7 @@ public enum P256 {
                 let publicKey = try CryptoKit.P256.KeyAgreement.PublicKey(pemRepresentation: keyData)
                 try self.init(x963Representation: publicKey.x963Representation)
             }
+            #endif
         }
     }
 }
@@ -602,21 +626,28 @@ extension P256.Signing {
     public struct ECDSASignature {
         /// A distinguished encoding rules (DER) encoded representation of a P-256 digital signature.
         public private(set) var derRepresentation: Data
+        #if canImport(CryptoKit)
         /// A raw data representation of a P-256 digital signature.
         @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
         public var rawRepresentation: Data {
             return try! CryptoKit.P256.Signing.ECDSASignature(derRepresentation: derRepresentation).rawRepresentation
         }
+        #endif
         /// Creates a P-256 digital signature from a Distinguished Encoding Rules (DER) encoded representation.
         /// - Parameters:
         ///    - derRepresentation: A distinguished encoding rules (DER) encoded representation of a P-256 digital signature.
         public init<D>(derRepresentation: D) throws where D: DataProtocol {
+            #if canImport(CryptoKit)
             if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
                 self.derRepresentation = try CryptoKit.P256.Signing.ECDSASignature(derRepresentation: derRepresentation).derRepresentation
             } else {
                 self.derRepresentation = Data(derRepresentation)
             }
+            #else
+            self.derRepresentation = Data(derRepresentation)
+            #endif
         }
+        #if canImport(CryptoKit)
         /// Creates a P-256 digital signature from a raw representation.
         /// - Parameters:
         ///    - rawRepresentation: A raw representation of the key as a collection of contiguous bytes.
@@ -624,6 +655,7 @@ extension P256.Signing {
         public init<D>(rawRepresentation: D) throws where D: DataProtocol {
             self.derRepresentation = try CryptoKit.P256.Signing.ECDSASignature(rawRepresentation: rawRepresentation).derRepresentation
         }
+        #endif
     }
 }
 

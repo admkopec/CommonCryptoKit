@@ -42,10 +42,12 @@ public extension ChaChaPoly {
     /// - Returns:
     ///    The sealed message.
     static func seal<Plaintext, AuthenticatedData>(_ message: Plaintext, using key: SymmetricKey, nonce: ChaChaPoly.Nonce? = nil, authenticating authenticatedData: AuthenticatedData) throws -> ChaChaPoly.SealedBox where Plaintext : DataProtocol, AuthenticatedData : DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.ChaChaPoly.seal(message, using: key.asCryptoKitKey, nonce: nonce?.asCryptoKitNonce, authenticating: authenticatedData)
             return try ChaChaPoly.SealedBox(nonce: ChaChaPoly.Nonce(data: cryptoSealBox.nonce.dataRepresentation), ciphertext: cryptoSealBox.ciphertext, tag: cryptoSealBox.tag)
         }
+        #endif
         
         let nonce = nonce ?? ChaChaPoly.Nonce()
         var length: Int32 = 0
@@ -94,10 +96,12 @@ public extension ChaChaPoly {
     /// - Returns:
     ///    The sealed message.
     static func seal<Plaintext>(_ message: Plaintext, using key: SymmetricKey, nonce: ChaChaPoly.Nonce? = nil) throws -> ChaChaPoly.SealedBox where Plaintext : DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.ChaChaPoly.seal(message, using: key.asCryptoKitKey, nonce: nonce?.asCryptoKitNonce)
             return try ChaChaPoly.SealedBox(nonce: ChaChaPoly.Nonce(data: cryptoSealBox.nonce.dataRepresentation), ciphertext: cryptoSealBox.ciphertext, tag: cryptoSealBox.tag)
         }
+        #endif
         // Fallback using OpenSSL
         return try ChaChaPoly.seal(message, using: key, nonce: nonce, authenticating: Data())
     }
@@ -118,10 +122,12 @@ public extension ChaChaPoly {
     /// - Returns:
     ///    The original plaintext message that was sealed in the box, as long as the correct key is used and authentication succeeds. The call throws an error if decryption or authentication fail.
     static func open<AuthenticatedData>(_ sealedBox: ChaChaPoly.SealedBox, using key: SymmetricKey, authenticating authenticatedData: AuthenticatedData) throws -> Data where AuthenticatedData : DataProtocol {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.ChaChaPoly.SealedBox(nonce: sealedBox.nonce.asCryptoKitNonce, ciphertext: sealedBox.ciphertext, tag: sealedBox.tag)
             return try CryptoKit.ChaChaPoly.open(cryptoSealBox, using: key.asCryptoKitKey, authenticating: authenticatedData)
         }
+        #endif
         let nonce = sealedBox.nonce
         let ciphertext = sealedBox.ciphertext
         var givenTag = sealedBox.tag
@@ -171,15 +177,18 @@ public extension ChaChaPoly {
     /// - Returns:
     ///    The original plaintext message that was sealed in the box, as long as the correct key is used and authentication succeeds. The call throws an error if decryption or authentication fail.
     static func open(_ sealedBox: ChaChaPoly.SealedBox, using key: SymmetricKey) throws -> Data {
+        #if canImport(CryptoKit)
         if #available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *) {
             let cryptoSealBox = try CryptoKit.ChaChaPoly.SealedBox(nonce: sealedBox.nonce.asCryptoKitNonce, ciphertext: sealedBox.ciphertext, tag: sealedBox.tag)
             return try CryptoKit.ChaChaPoly.open(cryptoSealBox, using: key.asCryptoKitKey)
         }
+        #endif
         // Fallback using OpenSSL
         return try ChaChaPoly.open(sealedBox, using: key, authenticating: Data())
     }
 }
 
+#if canImport(CryptoKit)
 // CryptoKit conversions
 @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
 fileprivate extension ChaChaPoly.Nonce {
@@ -187,3 +196,4 @@ fileprivate extension ChaChaPoly.Nonce {
         return try! CryptoKit.ChaChaPoly.Nonce(data: dataRepresentation)
     }
 }
+#endif

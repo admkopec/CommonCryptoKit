@@ -10,10 +10,6 @@
 
 import Foundation
 
-#if canImport(CryptoKit)
-import CryptoKit
-#endif
-
 /// A container for older, cryptographically insecure algorithms.
 @available(iOS, introduced: 10.0)
 @available(tvOS, introduced: 10.0)
